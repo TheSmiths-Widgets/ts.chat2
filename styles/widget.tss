@@ -1,0 +1,71 @@
+"#container" : {
+    height:          Ti.UI.FILL,
+    width:           Ti.UI.FILL,
+    backgroundColor: "blue"
+}
+
+"#listView" : {
+    width:           Ti.UI.FILL,
+    height:          Ti.UI.FILL,
+    backgroundColor: "red",
+    top:             0,
+    separatorColor:  "transparent"
+}
+
+"#chatTextFieldContainer": {
+    width: Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+    backgroundColor: "#eee",
+    bottom: 0,
+    layout: "vertical"
+}
+
+"#separator": {
+    backgroundColor:  "green",
+    height:           "3dp",
+    width:            Ti.UI.FILL
+}
+
+"#subSeparator" : {
+    width: Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+}
+
+"TextArea" : {
+    width: Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+
+    color: "#222",
+
+    textAlign: 'left',
+    focused: "false",
+
+    left: 2,
+    right: 54,
+
+    focused: "false"
+}
+
+"#btnWrapper" : {
+    bottom: 0,
+    right: 0,
+    width: 54,
+    height: 54
+}
+
+"Button" : {
+    bottom: 2,
+    right: 2,
+    width: 50,
+    height: 50,
+
+    font: {
+        fontSize: "16dp"
+    },
+
+    borderRadius: 25,
+
+    backgroundColor: "#00AA00",
+    backgroundFocusedColor: "#33CC33",
+    backgroundSelectedColor: "#33CC33"
+}
