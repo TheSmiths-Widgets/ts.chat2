@@ -1,13 +1,36 @@
 <Alloy>
-    <View id="container">
-        <ListView id="listView" defaultItemTemplate="ongoing" onSingletap="_snatchFocus">
+    <Collection src="message" />
 
-            <ListSection class="message" >
-                <ListItem title="JE SUIS UN DERNIER MESSAGE" />
-                <FooterView>
-                        <Label class="date">today</Label>
-                </FooterView>
+    <View id="container">
+        <ListView id="listView" onSingletap="_snatchFocus" defaultItemTemplate="messageOnTheLeft" >
+            
+
+            <Templates>
+                <ItemTemplate name="messageOnTheLeft">
+                    <View class="listItem">
+                        <View class="message-container">
+                            <Label class="message left" bindId="message" />
+                        </View>
+                        <Label class="date" binId="messageDate" />
+                    </View>
+                </ItemTemplate>
+
+                <ItemTemplate name="messageOnTheRight">
+                    <View class="listItem">
+                        <View class="message-container">
+                            <Label class="message right" bindId="message" />
+                        </View>
+                        <Label class="date" binId="messageDate" />
+                    </View>
+                </ItemTemplate>
+            </Templates>
+
+
+            <ListSection dataCollection="message" dataFunction="renderMessages" >
+                <ListItem message:text="{content}" messageDate:text="{date}" />
             </ListSection>
+
+
         </ListView>
         <View id="chatTextFieldContainer">
             <Label id="separator" />

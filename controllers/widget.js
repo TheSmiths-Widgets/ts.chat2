@@ -1,12 +1,53 @@
 $._resizeThreshold = 0;
 
-$._config = {
-    maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25 // Not more that 25% of the screen height
-};
+/**
+ * @method init
+ * Initialize the widget. MUST be called before any further action. 
+ * @param {Object} config The configuration of the module
+ * @param {Number} config.batchSize How many message should be ask for each load [OPTIONAL, default 10]
+ * @param {Number} config.maxTypingHeight The max size of the typing area, if decimal less than 1, a
+ *      corresponding percentage of the screen size will be used. [OPTIONAL, default 0.25]
+ * @param {Object[]} config.messages Initial set of messages [REQUIRED]
+ */
+function init (config) {
+    /* Retrieve the configuration */
+    if (config.maxTypingHeight && Math.abs(+config.maxTypingHeight) < 1) {
+        config.maxTypingHeight = Ti.Platform.displayCaps.platformHeight * +config.maxTypingHeight;
+    }
+    
+    var message1 = Widget.createModel('Message', {
+        content: "Content from init 1",
+        date: "test",
+        side: "left"
+    });
 
-if (OS_ANDROID) { 
-    /* On android, the stored size isn't the good one. Need to be weighted with the density */
-    $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor; 
+    var message2 = Widget.createModel('Message', {
+        content: "Content from init 2",
+        date: (new Date()).toString(),
+        side: "right"
+    });
+
+    //Widget.Collections.message = config.messages;
+    Widget.Collections.message.add(message1);
+    Widget.Collections.message.add(message2);
+
+    $._config = _.extend({
+        batchSize: 10,
+        maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25 // Not more that 25% of the screen height
+    }, config);
+
+    if (OS_ANDROID) { 
+        /* On android, the stored size isn't the good one. Need to be weighted with the density */
+        $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor; 
+    }
+    /* Then, just add first messages to the view */
+    
+    //$.messages.setData(_buildMessages($._NATURE.OLD, $._config.messages));
+    //delete($._config.messages); //Don't need them here anymore as they are stocked elsewhere
+    // $.listView.scrollToItem(listView.getSectionCount() - 1, 0, {
+    //     animated : false
+    //     //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
+    // });
 }
 
 /**
@@ -72,6 +113,8 @@ function _send (clickEvent) {
  */
 function _snatchFocus(clickEvent) {
     $.typingArea.blur();
+    renderMessages();// TODO delete
+    Ti.API.debug(JSON.stringify(Widget.Collections.message, null, "\t")); // TODO delete
 }
 
 var listener = function () {
@@ -80,3 +123,6 @@ var listener = function () {
 };
 
 $.chatTextFieldContainer.addEventListener('postlayout', listener);
+
+/* Exports the API */
+exports.init = init;
