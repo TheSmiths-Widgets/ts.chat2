@@ -18,30 +18,46 @@
     layout: "vertical"
 }
 
-".message-container" : {
+".message-row" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE
 } 
 
-".message" : {
+".message-box" : {
     width: "70%",
-    height: Ti.UI.SIZE
+    height: Ti.UI.SIZE,
+    borderRadius: 10,
+    top: 3,
+    bottom: 3
 }
 
 ".left" : {
-    left: 0,
-    backgroundColor: "blue"
+    left: 3,
+    backgroundColor: "#ddd"
 }
 
 ".right" : {
-    right: 0,
-    backgroundColor: "yellow"
+    right: 3,
+    backgroundColor: "#bbb"
+}
+
+".message" : {
+    top: 7,
+    right: 7,
+    bottom: 7,
+    left: 7,
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE
 }
 
 ".date" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
-    backgroundColor: "red"
+    textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
+    color: "#444",
+    font: {
+        fontSize: "10dp"
+    }
 }
 
 // NEW MESSAGE TEXT FIELD
@@ -71,7 +87,7 @@
 
     color: "#222",
 
-    textAlign: 'left',
+    textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
     focused:   "false",
 
     left:  4,

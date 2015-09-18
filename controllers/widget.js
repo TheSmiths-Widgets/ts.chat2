@@ -1,5 +1,9 @@
 $._resizeThreshold = 0;
 
+$._dateOptions = {
+    weekday: "short", year: "numeric", month: "short",
+    day: "numeric", hour: "2-digit", minute: "2-digit", second: undefined
+};
 /**
  * @method init
  * Initialize the widget. MUST be called before any further action.
@@ -73,8 +77,8 @@ function _resizeTypingArea (changeEvent) {
  * @fires newMessage
  */
 function _send (clickEvent) {
+    if ($.typingArea.value == "") return;
     $.sendBtn.touchEnabled = false;
-
     /*
      * Triggered when the user send a message
      * @event newMessage
@@ -85,17 +89,30 @@ function _send (clickEvent) {
      */
     var newmessageEvent = {
         message: $.typingArea.value,
-        date: new Date(),
+        created_at: new Date(),
         success: function () {
             $.typingArea.value = "";
             _resizeTypingArea();
             $.sendBtn.touchEnabled = true;
+            var numberSections = $.listView.getSectionCount();
+            var lastSection =  ($.listView.getSections())[numberSections - 1];
+            $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
+                animated : true
+                //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
+            });
         },
         error: function () {
             $.sendBtn.touchEnabled = true;
         }
     };
     $.trigger('newMessage', newmessageEvent);
+}
+
+function setTemplate(model) {
+    var transform = model.toJSON() ; // collection of messages
+    transform.template = transform.emitter == Alloy.User.get('objectId')? "messageOnTheRight" : "messageOnTheLeft";
+    transform.created_at = model.get('created_at').toLocaleString(Titanium.Locale.currentLocale, $._dateOptions);
+    return transform;
 }
 
 /**
@@ -106,8 +123,6 @@ function _send (clickEvent) {
  */
 function _snatchFocus(clickEvent) {
     $.typingArea.blur();
-    Ti.API.debug(JSON.stringify($.messages, null, "\t")); // TODO delete
-    Ti.API.debug(JSON.stringify($.messages.models, null, "\t")); // TODO delete
 }
 
 var listener = function () {

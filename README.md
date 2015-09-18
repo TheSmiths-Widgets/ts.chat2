@@ -4,6 +4,8 @@
 
 A small chat view (list of messages and text area to send new ones).
 
+![Demo](https://raw.githubusercontent.com/rpellerin/ts.chat2/develop/demo.gif)
+
 ## How to install
 
 Clone this repo into your ```app/widget``` folder.

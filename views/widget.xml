@@ -1,14 +1,16 @@
 <Alloy>
     <Collection id="messages" src="message" instance="true"/>
     <View id="container">
-        <ListView id="listView" onSingletap="_snatchFocus" defaultItemTemplate="messageOnTheLeft" >
+        <ListView id="listView" onSingletap="_snatchFocus" >
 
             <Templates>
 
                 <ItemTemplate name="messageOnTheLeft">
                     <View class="listItem">
-                        <View class="message-container">
-                            <Label class="message left" bindId="message" />
+                        <View class="message-row">
+                            <View class="message-box left">
+                                <Label class="message" bindId="message" />
+                            </View>
                         </View>
                         <Label class="date" bindId="messageDate" />
                     </View>
@@ -16,8 +18,10 @@
 
                 <ItemTemplate name="messageOnTheRight">
                     <View class="listItem">
-                        <View class="message-container">
-                            <Label class="message right" bindId="message" />
+                        <View class="message-row">
+                            <View class="message-box right">
+                                <Label class="message" bindId="message" />
+                            </View>
                         </View>
                         <Label class="date" bindId="messageDate" />
                     </View>
@@ -26,8 +30,8 @@
             </Templates>
 
 
-            <ListSection dataCollection="$.messages" dataFunction="renderMessages" >
-                <ListItem message:text="{content}" messageDate:text="{created_at}" />
+            <ListSection dataCollection="$.messages" dataFunction="renderMessages" dataTransform="setTemplate">
+                <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" />
             </ListSection>
 
         </ListView>
