@@ -4,6 +4,7 @@ $._dateOptions = {
     weekday: "short", year: "numeric", month: "short",
     day: "numeric", hour: "2-digit", minute: "2-digit", second: undefined
 };
+
 /**
  * @method init
  * Initialize the widget. MUST be called before any further action.
@@ -37,14 +38,6 @@ function init (config) {
         /* On android, the stored size isn't the good one. Need to be weighted with the density */
         $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
-    /* Then, just add first messages to the view */
-
-    //$.messages.setData(_buildMessages($._NATURE.OLD, $._config.messages));
-    //delete($._config.messages); //Don't need them here anymore as they are stocked elsewhere
-    // $.listView.scrollToItem(listView.getSectionCount() - 1, 0, {
-    //     animated : false
-    //     //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
-    // });
 }
 
 /**
@@ -71,6 +64,20 @@ function _resizeTypingArea (changeEvent) {
 
 /**
  * @private
+ * @method scrollToBottom
+ * Scroll the list view to the bottom, to display the most recent messages
+ */
+function scrollToBottom() {
+    var numberSections = $.listView.getSectionCount();
+    var lastSection =  ($.listView.getSections())[numberSections - 1];
+    $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
+        animated : true
+        //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
+    });
+}
+
+/**
+ * @private
  * @method _send
  * Listener of the send button. Trigger a 'newMessage' event.
  * @param {appcelerator: Titanium.UI.Button-event-click Button-event-click} clickEvent The corresponding event
@@ -79,6 +86,7 @@ function _resizeTypingArea (changeEvent) {
 function _send (clickEvent) {
     if ($.typingArea.value == "") return;
     $.sendBtn.touchEnabled = false;
+    
     /*
      * Triggered when the user send a message
      * @event newMessage
@@ -94,12 +102,7 @@ function _send (clickEvent) {
             $.typingArea.value = "";
             _resizeTypingArea();
             $.sendBtn.touchEnabled = true;
-            var numberSections = $.listView.getSectionCount();
-            var lastSection =  ($.listView.getSections())[numberSections - 1];
-            $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
-                animated : true
-                //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
-            });
+            scrollToBottom();
         },
         error: function () {
             $.sendBtn.touchEnabled = true;
@@ -108,6 +111,14 @@ function _send (clickEvent) {
     $.trigger('newMessage', newmessageEvent);
 }
 
+/**
+ * @private
+ * @method setTemplate
+ * DO NOT CALL IT YOURSELF. It's a method called by Titanium before displaying each message.
+ * Basically, it formats the fields.
+ * @param {appcelerator: Alloy.Model} model A message (model 'Message')
+ * @returns {Object} A JSON version of the message, ready to be displayed
+ */
 function setTemplate(model) {
     var transform = model.toJSON() ; // collection of messages
     transform.template = transform.emitter == Alloy.User.get('objectId')? "messageOnTheRight" : "messageOnTheLeft";
@@ -134,7 +145,6 @@ $.chatTextFieldContainer.addEventListener('postlayout', listener);
 
 /* Exports the API */
 exports.init = init;
-
 exports.destroy = function () {
     $.messages.off('fetch destroy change add remove reset', renderMessages);
     $._config.messages.off('fetch destroy change add remove reset', renderMessages);
