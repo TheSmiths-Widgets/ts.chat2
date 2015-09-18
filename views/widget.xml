@@ -1,17 +1,16 @@
 <Alloy>
-    <Collection src="message" />
-
+    <Collection id="messages" src="message" instance="true"/>
     <View id="container">
         <ListView id="listView" onSingletap="_snatchFocus" defaultItemTemplate="messageOnTheLeft" >
-            
 
             <Templates>
+
                 <ItemTemplate name="messageOnTheLeft">
                     <View class="listItem">
                         <View class="message-container">
                             <Label class="message left" bindId="message" />
                         </View>
-                        <Label class="date" binId="messageDate" />
+                        <Label class="date" bindId="messageDate" />
                     </View>
                 </ItemTemplate>
 
@@ -20,16 +19,16 @@
                         <View class="message-container">
                             <Label class="message right" bindId="message" />
                         </View>
-                        <Label class="date" binId="messageDate" />
+                        <Label class="date" bindId="messageDate" />
                     </View>
                 </ItemTemplate>
+
             </Templates>
 
 
-            <ListSection dataCollection="message" dataFunction="renderMessages" >
-                <ListItem message:text="{content}" messageDate:text="{date}" />
+            <ListSection dataCollection="$.messages" dataFunction="renderMessages" >
+                <ListItem message:text="{content}" messageDate:text="{created_at}" />
             </ListSection>
-
 
         </ListView>
         <View id="chatTextFieldContainer">

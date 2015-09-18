@@ -2,7 +2,7 @@ $._resizeThreshold = 0;
 
 /**
  * @method init
- * Initialize the widget. MUST be called before any further action. 
+ * Initialize the widget. MUST be called before any further action.
  * @param {Object} config The configuration of the module
  * @param {Number} config.batchSize How many message should be ask for each load [OPTIONAL, default 10]
  * @param {Number} config.maxTypingHeight The max size of the typing area, if decimal less than 1, a
@@ -14,34 +14,27 @@ function init (config) {
     if (config.maxTypingHeight && Math.abs(+config.maxTypingHeight) < 1) {
         config.maxTypingHeight = Ti.Platform.displayCaps.platformHeight * +config.maxTypingHeight;
     }
-    
-    var message1 = Widget.createModel('Message', {
-        content: "Content from init 1",
-        date: "test",
-        side: "left"
-    });
 
-    var message2 = Widget.createModel('Message', {
-        content: "Content from init 2",
-        date: (new Date()).toString(),
-        side: "right"
-    });
+    /* Syncrhonize external collection with the one in the widget */
+    $.messages.reset();
+    $.messages.add(config.messages.models);
 
-    //Widget.Collections.message = config.messages;
-    Widget.Collections.message.add(message1);
-    Widget.Collections.message.add(message2);
+    config.messages.on('fetch destroy change add remove reset', function (e) {
+        $.messages.models = $._config.messages.models;
+        renderMessages(e);
+    });
 
     $._config = _.extend({
         batchSize: 10,
         maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25 // Not more that 25% of the screen height
     }, config);
 
-    if (OS_ANDROID) { 
+    if (OS_ANDROID) {
         /* On android, the stored size isn't the good one. Need to be weighted with the density */
-        $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor; 
+        $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
     /* Then, just add first messages to the view */
-    
+
     //$.messages.setData(_buildMessages($._NATURE.OLD, $._config.messages));
     //delete($._config.messages); //Don't need them here anymore as they are stocked elsewhere
     // $.listView.scrollToItem(listView.getSectionCount() - 1, 0, {
@@ -63,7 +56,7 @@ function _resizeTypingArea (changeEvent) {
     if (typingAreaHeight > $._config.maxTypingHeight) {
         /* The area is bigger than the limit, let's resize */
         $.typingArea.height = $._config.maxTypingHeight;
-         //Keep an eye on the length that trigger this change 
+         //Keep an eye on the length that trigger this change
         $._resizeThreshold = $._resizeThreshold || length;
     } else if (length < $._resizeThreshold) {
         /* The area is becoming smaller, let it handle its own size like a grown up */
@@ -108,13 +101,13 @@ function _send (clickEvent) {
 /**
  * @private
  * @method _snatchFocus
- * Listener that handle clicks on the tableview. It removes the focus on the typing area. 
+ * Listener that handle clicks on the tableview. It removes the focus on the typing area.
  * @param {appcelerator: Titanium.UI.Button-event-click} clickEvent The corresponding event
  */
 function _snatchFocus(clickEvent) {
     $.typingArea.blur();
-    renderMessages();// TODO delete
-    Ti.API.debug(JSON.stringify(Widget.Collections.message, null, "\t")); // TODO delete
+    Ti.API.debug(JSON.stringify($.messages, null, "\t")); // TODO delete
+    Ti.API.debug(JSON.stringify($.messages.models, null, "\t")); // TODO delete
 }
 
 var listener = function () {
@@ -126,3 +119,8 @@ $.chatTextFieldContainer.addEventListener('postlayout', listener);
 
 /* Exports the API */
 exports.init = init;
+
+exports.destroy = function () {
+    $.messages.off('fetch destroy change add remove reset', renderMessages);
+    $._config.messages.off('fetch destroy change add remove reset', renderMessages);
+};
