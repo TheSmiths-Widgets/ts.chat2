@@ -24,13 +24,14 @@ function init (config) {
     $.messages.reset();
     $.messages.add(config.messages.models);
 
+    // When the outter collection is updated...
     config.messages.on('fetch destroy change add remove reset', function (e) {
         $.messages.models = $._config.messages.models;
-        renderMessages(e);
+        renderMessages(e); // Force UI update
     });
 
     $._config = _.extend({
-        batchSize: 10,
+        batchSize: 10, // Default number of messages to display
         maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25 // Not more that 25% of the screen height
     }, config);
 
@@ -38,6 +39,9 @@ function init (config) {
         /* On android, the stored size isn't the good one. Need to be weighted with the density */
         $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
+
+    renderMessages(); // If we don't force a UI refresh, scrollToBottom won't work
+    scrollToBottom();
 }
 
 /**
@@ -70,10 +74,11 @@ function _resizeTypingArea (changeEvent) {
 function scrollToBottom() {
     var numberSections = $.listView.getSectionCount();
     var lastSection =  ($.listView.getSections())[numberSections - 1];
-    $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
-        animated : true
-        //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
-    });
+    if (lastSection)
+        $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
+            animated : true
+            //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
+        });
 }
 
 /**
@@ -133,7 +138,9 @@ function setTemplate(model) {
  * @param {appcelerator: Titanium.UI.Button-event-click} clickEvent The corresponding event
  */
 function _snatchFocus(clickEvent) {
+    alert("snatch");
     $.typingArea.blur();
+    scrollToBottom();
 }
 
 var listener = function () {

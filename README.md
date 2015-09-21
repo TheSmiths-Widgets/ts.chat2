@@ -53,7 +53,6 @@ Bonus, in your tss file:
 ## TODO (from the most important to the least)
 
 - Test on iOS
-- Add more functions from [ts.chat](https://github.com/TheSmiths-Widgets/ts.chat) (widget.js)
 - Add some customization
     - Allow to add more buttons at the bottom (like in the Hangout app from Google)
         - Each button would raise its own event when pressed
