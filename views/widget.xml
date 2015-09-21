@@ -36,12 +36,9 @@
 
         </ListView>
         <View id="chatTextFieldContainer">
-            <Label id="separator" />
-            <View id="subSeparator">
-                <TextArea id="typingArea" onChange="_resizeTypingArea" />
-                <View id="btnWrapper">
-                    <Button id="sendBtn" title=">" onClick="_send" />
-                </View>
+            <TextArea id="typingArea" onChange="_resizeTypingArea" />
+            <View id="btnWrapper">
+                <Button id="sendBtn" title=">" onClick="_send" />
             </View>
         </View>
     </View>

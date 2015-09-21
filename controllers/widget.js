@@ -40,8 +40,23 @@ function init (config) {
         $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
 
-    renderMessages(); // If we don't force a UI refresh, scrollToBottom won't work
-    scrollToBottom();
+    if (OS_IOS) {
+        var control = Ti.UI.createRefreshControl({
+            tintColor:'blue'
+        });
+
+        $.listView.refreshControl = control;
+        control.addEventListener('refreshstart',function(e){
+            Ti.API.info('refreshstart');
+            setTimeout(function(){
+                Ti.API.debug('Timeout');
+                control.endRefreshing();
+            }, 2000);
+        });
+    }
+
+    renderMessages(); // If we don't force a UI refresh, scrollToBottom won't work TODO not working
+    scrollToBottom(); // TODO not working
 }
 
 /**
@@ -138,9 +153,7 @@ function setTemplate(model) {
  * @param {appcelerator: Titanium.UI.Button-event-click} clickEvent The corresponding event
  */
 function _snatchFocus(clickEvent) {
-    alert("snatch");
     $.typingArea.blur();
-    scrollToBottom();
 }
 
 var listener = function () {
