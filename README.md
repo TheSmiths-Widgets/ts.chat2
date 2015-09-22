@@ -52,10 +52,10 @@ Bonus, in your tss file:
 
 ## TODO (from the most important to the least)
 
-- Correct bugs on iOS (dates now showing, listItem too large on clicks)
 - Correct the date formatting
 - Correct the function '_snatchFocus' not being fired on Android
 - Find a workaround for pull to refresh for Android (we don't want to use https://github.com/raymondkam/Ti.SwipeRefreshLayout)
+- Add functions form ts.chat (widget.js)
 - Add some customization
     - Allow to add more buttons at the bottom (like in the Hangout app from Google)
         - Each button would raise its own event when pressed

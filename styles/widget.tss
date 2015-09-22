@@ -12,6 +12,15 @@
     separatorColor:  "transparent"
 }
 
+"ListItem" : {
+    touchEnabled: false
+}
+
+"ListItem[platform=ios]" : {
+    height: Ti.UI.SIZE, // Best line of code of my life
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE
+}
+
 ".listItem" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
@@ -57,8 +66,7 @@
     color: "#444",
     font: {
         fontSize: "10dp"
-    },
-    backgroundColor: "red"
+    }
 }
 
 // NEW MESSAGE TEXT FIELD
