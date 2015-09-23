@@ -12,6 +12,11 @@
     separatorColor:  "transparent"
 }
 
+"ListItem[platform=ios]" : {
+    height: Ti.UI.SIZE, // Best line of code of my life
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE // prevent weird feature on iOS (background strech)
+}
+
 ".listItem" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
@@ -66,14 +71,7 @@
     width:           Ti.UI.FILL,
     height:          Ti.UI.SIZE,
     bottom:          0,
-    backgroundColor: "#eee",
-    layout:          "vertical"
-}
-
-"#separator": {
-    backgroundColor:  "#ccc",
-    height:           "2dp",
-    width:            Ti.UI.FILL
+    backgroundColor: "#eee"
 }
 
 "#subSeparator" : {
@@ -86,6 +84,7 @@
     height: Ti.UI.SIZE,
 
     color: "#222",
+    backgroundColor: "white",
 
     textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
     focused:   "false",
@@ -112,6 +111,7 @@
     font: {
         fontSize: "16dp"
     },
+    color: "white",
 
     borderRadius: 25,
 
