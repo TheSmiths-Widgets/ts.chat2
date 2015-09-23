@@ -79,7 +79,7 @@ function _resizeTypingArea (changeEvent) {
  * Scroll the list view to the bottom, to display the most recent messages
  */
 function scrollToBottom() {
-    $.listView.scrollToItem(0, $.messages.length - 1, {
+    $.listView.scrollToItem(0, $.messages.models.length - 1, {
         animated : true
     });
 }
@@ -92,7 +92,7 @@ function scrollToBottom() {
  * @fires newMessage
  */
 function _send(clickEvent) {
-    if ($.typingArea.value == "") return;
+    if (0 === $.typingArea.value.length) return;
     $.sendBtn.touchEnabled = false;
     
     /*
