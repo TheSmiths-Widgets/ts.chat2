@@ -1,10 +1,5 @@
 $._resizeThreshold = 0;
 
-$._dateOptions = {
-    weekday: "short", year: "numeric", month: "short",
-    day: "numeric", hour: "2-digit", minute: "2-digit", second: undefined
-};
-
 /**
  * @method init
  * Initialize the widget. MUST be called before any further action.
@@ -14,7 +9,7 @@ $._dateOptions = {
  *      corresponding percentage of the screen size will be used. [OPTIONAL, default 0.25]
  * @param {Object[]} config.messages Initial set of messages [REQUIRED]
  */
-function init (config) {
+function init(config) {
     /* Retrieve the configuration */
     if (config.maxTypingHeight && Math.abs(+config.maxTypingHeight) < 1) {
         config.maxTypingHeight = Ti.Platform.displayCaps.platformHeight * +config.maxTypingHeight;
@@ -46,23 +41,20 @@ function init (config) {
         });
 
         $.listView.refreshControl = control;
-        control.addEventListener('refreshstart',function(e){
-            Ti.API.info('refreshstart');
+        control.addEventListener('refreshstart', function(e){
             setTimeout(function(){
-                Ti.API.debug('Timeout');
                 control.endRefreshing();
             }, 2000);
         });
     }
 
-    renderMessages(); // If we don't force a UI refresh, scrollToBottom won't work TODO not working
-    scrollToBottom(); // TODO not working
+    setTimeout(scrollToBottom, 500); // TODO something more beautiful, elegant, clean...
 }
 
 /**
  * @private
  * @method _resizeTypingArea
- * Avoid the area to become too large while typing a message
+ * Avoid the area to become too 'tall' while typing a message
  * @param {?} clickEvent The corresponding event
  */
 function _resizeTypingArea (changeEvent) {
@@ -87,13 +79,9 @@ function _resizeTypingArea (changeEvent) {
  * Scroll the list view to the bottom, to display the most recent messages
  */
 function scrollToBottom() {
-    var numberSections = $.listView.getSectionCount();
-    var lastSection =  ($.listView.getSections())[numberSections - 1];
-    if (lastSection)
-        $.listView.scrollToItem(numberSections - 1, (lastSection.getItems()).length - 1, {
-            animated : true
-            //position : Titanium.UI.iPhone.TableViewScrollPosition.TOP
-        });
+    $.listView.scrollToItem(0, $.messages.length - 1, {
+        animated : true
+    });
 }
 
 /**
@@ -103,7 +91,7 @@ function scrollToBottom() {
  * @param {appcelerator: Titanium.UI.Button-event-click Button-event-click} clickEvent The corresponding event
  * @fires newMessage
  */
-function _send (clickEvent) {
+function _send(clickEvent) {
     if ($.typingArea.value == "") return;
     $.sendBtn.touchEnabled = false;
     
@@ -133,6 +121,22 @@ function _send (clickEvent) {
 
 /**
  * @private
+ * @method getDisplayableDate
+ * Takes a Date as an argument and returns a String (either a date or a time).
+ * Basically, if the Date provided is today, no matter what time it is, it will return the time of the argument (HH:mm). Otherwise, it will return the date of the argument (formatted to the current locale).
+ * @param {Date} date A date
+ * @returns {String} A date to display (either a date or a time)
+ */
+function getDisplayableDate(date) {
+    var today = new Date();
+    if (today.getYear() == date.getYear() && today.getMonth() == date.getMonth() && today.getDate() == date.getDate()) {
+        return date.getHours() + ':' + date.getMinutes();
+    } else
+        return date.toLocaleDateString(Titanium.Locale.currentLocale);
+}
+
+/**
+ * @private
  * @method setTemplate
  * DO NOT CALL IT YOURSELF. It's a method called by Titanium before displaying each message.
  * Basically, it formats the fields.
@@ -142,7 +146,7 @@ function _send (clickEvent) {
 function setTemplate(model) {
     var transform = model.toJSON() ; // collection of messages
     transform.template = transform.emitter == Alloy.User.get('objectId')? "messageOnTheRight" : "messageOnTheLeft";
-    transform.created_at = model.get('created_at').toLocaleString(Titanium.Locale.currentLocale, $._dateOptions);
+    transform.created_at = getDisplayableDate(model.get('created_at'));
     return transform;
 }
 
@@ -156,12 +160,30 @@ function _snatchFocus(clickEvent) {
     $.typingArea.blur();
 }
 
-var listener = function () {
-    $.chatTextFieldContainer.removeEventListener('postlayout',listener);
+/* Workaround for iOS: resize the whole window when the keybord appears */
+(function fixes () {
+    if (OS_IOS) {
+        Ti.App.addEventListener('keyboardframechanged', function (e) {
+            $.container.bottom = (e.keyboardFrame.y < Ti.Platform.displayCaps.platformHeight) ?
+                e.keyboardFrame.height
+                :
+                0;
+        });
+    }
+})();
+
+
+
+/* ----------- LISTENERS ----------- */
+$.listView.addEventListener('itemclick', _snatchFocus);
+
+
+var listViewSetBottom = function () {
+    $.chatTextFieldContainer.removeEventListener('postlayout',listViewSetBottom);
     $.listView.setBottom($.chatTextFieldContainer.rect.height);
 };
 
-$.chatTextFieldContainer.addEventListener('postlayout', listener);
+$.chatTextFieldContainer.addEventListener('postlayout', listViewSetBottom);
 
 /* Exports the API */
 exports.init = init;
@@ -169,3 +191,4 @@ exports.destroy = function () {
     $.messages.off('fetch destroy change add remove reset', renderMessages);
     $._config.messages.off('fetch destroy change add remove reset', renderMessages);
 };
+

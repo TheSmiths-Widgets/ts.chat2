@@ -12,13 +12,9 @@
     separatorColor:  "transparent"
 }
 
-"ListItem" : {
-    touchEnabled: false
-}
-
 "ListItem[platform=ios]" : {
     height: Ti.UI.SIZE, // Best line of code of my life
-    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE // prevent weird feature on iOS (background strech)
 }
 
 ".listItem" : {

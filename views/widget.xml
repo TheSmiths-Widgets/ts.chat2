@@ -1,7 +1,7 @@
 <Alloy>
     <Collection id="messages" src="message" instance="true"/>
     <View id="container">
-        <ListView id="listView" onSingletap="_snatchFocus" >
+        <ListView id="listView">
 
             <Templates>
 
