@@ -30,10 +30,22 @@ In your view:
 </Alloy>
 ```
 
-In your controller:
+In your controller (for example):
 
 ```javascript
-// TODO
+$.chat.on('newMessage', function (newMessageEvent) {
+    var message = Alloy.createModel('Message', {
+         content: newMessageEvent.message,
+         emitter: Alloy.User.get('objectId'),
+         created_at: newMessageEvent.created_at
+     });
+    Alloy.Collections.discussion.add(message);
+    newMessageEvent.success(); // Mandatory, to acknowledge sending the message successfully
+});
+
+$.chat.init({
+    messages: Alloy.Collections.discussion
+});
 ```
 
 Bonus, in your tss file:
