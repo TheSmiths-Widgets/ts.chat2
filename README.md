@@ -64,7 +64,6 @@ Bonus, in your tss file:
 
 ## TODO (from the most important to the least)
 
-- Find a workaround for pull to refresh for Android (we don't want to use https://github.com/raymondkam/Ti.SwipeRefreshLayout) and implement it for both platforms
 - Add some customization
     - Allow to add more buttons at the bottom (like in the Hangout app from Google)
         - Each button would raise its own event when pressed
@@ -72,6 +71,5 @@ Bonus, in your tss file:
     - Enable i18n
 - Generate the documentation into ```gh-pages```
 - Create a sample app into ```sample```
-- Prevent memory leaks (see http://docs.appcelerator.com/platform/latest/#!/guide/Alloy_Data_Binding)
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)
