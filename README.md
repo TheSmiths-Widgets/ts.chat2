@@ -43,6 +43,10 @@ $.chat.on('newMessage', function (newMessageEvent) {
     newMessageEvent.success(); // Mandatory, to acknowledge sending the message successfully
 });
 
+$.chat.on('moremessages', function () {
+    // Fetch a remote server and add data into Alloy.Collections.discussion
+});
+
 $.chat.init({
     messages: Alloy.Collections.discussion
 });
