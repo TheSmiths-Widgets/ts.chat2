@@ -30,10 +30,26 @@ In your view:
 </Alloy>
 ```
 
-In your controller:
+In your controller (for example):
 
 ```javascript
-// TODO
+$.chat.on('newMessage', function (newMessageEvent) {
+    var message = Alloy.createModel('Message', {
+         content: newMessageEvent.message,
+         emitter: Alloy.User.get('objectId'),
+         created_at: newMessageEvent.created_at
+     });
+    Alloy.Collections.discussion.add(message);
+    newMessageEvent.success(); // Mandatory, to acknowledge sending the message successfully
+});
+
+$.chat.on('moremessages', function () {
+    // Fetch a remote server and add data into Alloy.Collections.discussion
+});
+
+$.chat.init({
+    messages: Alloy.Collections.discussion
+});
 ```
 
 Bonus, in your tss file:
@@ -52,7 +68,6 @@ Bonus, in your tss file:
 
 ## TODO (from the most important to the least)
 
-- Find a workaround for pull to refresh for Android (we don't want to use https://github.com/raymondkam/Ti.SwipeRefreshLayout) and implement it for both platforms
 - Add some customization
     - Allow to add more buttons at the bottom (like in the Hangout app from Google)
         - Each button would raise its own event when pressed
@@ -60,6 +75,5 @@ Bonus, in your tss file:
     - Enable i18n
 - Generate the documentation into ```gh-pages```
 - Create a sample app into ```sample```
-- Prevent memory leaks (see http://docs.appcelerator.com/platform/latest/#!/guide/Alloy_Data_Binding)
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)

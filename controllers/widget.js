@@ -1,4 +1,5 @@
 $._resizeThreshold = 0;
+$._oldFirstVisibleItemIndex = -1;
 
 /**
  * @method init
@@ -35,18 +36,6 @@ function init(config) {
         $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
 
-    if (OS_IOS) {
-        var control = Ti.UI.createRefreshControl({
-            tintColor:'blue'
-        });
-
-        $.listView.refreshControl = control;
-        control.addEventListener('refreshstart', function(e){
-            setTimeout(function(){
-                control.endRefreshing();
-            }, 2000);
-        });
-    }
 
     setTimeout(scrollToBottom, 500); // TODO something more beautiful, elegant, clean...
 }
@@ -79,20 +68,21 @@ function _resizeTypingArea (changeEvent) {
  * Scroll the list view to the bottom, to display the most recent messages
  */
 function scrollToBottom() {
-    $.listView.scrollToItem(0, $.messages.length - 1, {
+    $.listView.scrollToItem(0, $.messages.models.length - 1, {
         animated : true
     });
+
 }
 
 /**
  * @private
  * @method _send
- * Listener of the send button. Trigger a 'newMessage' event.
+ * Listener of the send button. Trigger a 'newmessage' event.
  * @param {appcelerator: Titanium.UI.Button-event-click Button-event-click} clickEvent The corresponding event
- * @fires newMessage
+ * @fires newmessage
  */
 function _send(clickEvent) {
-    if ($.typingArea.value == "") return;
+    if (0 === $.typingArea.value.length) return;
     $.sendBtn.touchEnabled = false;
     
     /*
@@ -116,7 +106,7 @@ function _send(clickEvent) {
             $.sendBtn.touchEnabled = true;
         }
     };
-    $.trigger('newMessage', newmessageEvent);
+    $.trigger('newmessage', newmessageEvent);
 }
 
 /**
@@ -175,20 +165,38 @@ function _snatchFocus(clickEvent) {
 
 
 /* ----------- LISTENERS ----------- */
-$.listView.addEventListener('itemclick', _snatchFocus);
-
-
-var listViewSetBottom = function () {
+/* THIS FUNCTION IS SUPPOSED TO BE CALLED ONLY ONCE */
+function listViewSetBottom() {
     $.chatTextFieldContainer.removeEventListener('postlayout',listViewSetBottom);
     $.listView.setBottom($.chatTextFieldContainer.rect.height);
-};
+}
 
+/**
+ * @private
+ * @method scrollEnded
+ * Listener of the end of a scroll action on the list view
+ * @param {appcelerator: Titanium.UI.ListView event} scrollEvent The corresponding event
+ * @fires moremessages
+ */
+function scrollEnded(scrollEvent) {
+    if (scrollEvent.firstVisibleItemIndex !== $._oldFirstVisibleItemIndex && scrollEvent.firstVisibleItemIndex === 0)
+        $.trigger('moremessages');
+    $._oldFirstVisibleItemIndex = scrollEvent.firstVisibleItemIndex;
+}
+
+$.listView.addEventListener('itemclick', _snatchFocus);
 $.chatTextFieldContainer.addEventListener('postlayout', listViewSetBottom);
+$.listView.addEventListener('scrollend', scrollEnded);
 
 /* Exports the API */
 exports.init = init;
-exports.destroy = function () {
+exports.destroy = function() {
+    // Listeners on data
     $.messages.off('fetch destroy change add remove reset', renderMessages);
     $._config.messages.off('fetch destroy change add remove reset', renderMessages);
+
+    // Listeners on views
+    $.listView.removeEventListener('itemclick', _snatchFocus);
+    $.listView.removeEventListener('scrollend', scrollEnded);
 };
 
