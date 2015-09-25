@@ -98,6 +98,5 @@ Bonus, in your tss file:
     - Allow to change the send button (image or text)
     - Enable i18n
 - Generate the documentation into ```gh-pages```
-- Create a sample app into ```sample```
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)
