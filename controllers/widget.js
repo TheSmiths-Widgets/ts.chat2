@@ -9,11 +9,22 @@ $._oldFirstVisibleItemIndex = -1;
  * @param {Number} config.maxTypingHeight The max size of the typing area, if decimal less than 1, a
  *      corresponding percentage of the screen size will be used. [OPTIONAL, default 0.25]
  * @param {Object[]} config.messages Initial set of messages [REQUIRED]
+ * @param {Function} config.validateSender Function that takes one argument, a model. Must returns TRUE if the message is from you and then has to be displayed on the right side, otherwise it returns FALSE [REQUIRED]
  */
 function init(config) {
     /* Retrieve the configuration */
     if (config.maxTypingHeight && Math.abs(+config.maxTypingHeight) < 1) {
         config.maxTypingHeight = Ti.Platform.displayCaps.platformHeight * +config.maxTypingHeight;
+    }
+
+    $._config = _.extend({
+        batchSize: 10, // Default number of messages to display
+        maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25, // Not more that 25% of the screen height,
+        validateSender: function(ignore) { return true; }
+    }, config);
+
+    if ($._config.validateSender === undefined) {
+        throw("No function provided to determine to which side should go each message.");
     }
 
     /* Syncrhonize external collection with the one in the widget */
@@ -25,11 +36,6 @@ function init(config) {
         $.messages.models = $._config.messages.models;
         renderMessages(e); // Force UI update
     });
-
-    $._config = _.extend({
-        batchSize: 10, // Default number of messages to display
-        maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25 // Not more that 25% of the screen height
-    }, config);
 
     if (OS_ANDROID) {
         /* On android, the stored size isn't the good one. Need to be weighted with the density */
@@ -84,7 +90,7 @@ function scrollToBottom() {
 function _send(clickEvent) {
     if (0 === $.typingArea.value.length) return;
     $.sendBtn.touchEnabled = false;
-    
+
     /*
      * Triggered when the user send a message
      * @event newMessage
@@ -135,7 +141,7 @@ function getDisplayableDate(date) {
  */
 function setTemplate(model) {
     var transform = model.toJSON() ; // collection of messages
-    transform.template = transform.emitter == Alloy.User.get('objectId')? "messageOnTheRight" : "messageOnTheLeft";
+    transform.template = $._config.validateSender(model) ? "messageOnTheRight" : "messageOnTheLeft";
     transform.created_at = getDisplayableDate(model.get('created_at'));
     return transform;
 }
@@ -199,4 +205,3 @@ exports.destroy = function() {
     $.listView.removeEventListener('itemclick', _snatchFocus);
     $.listView.removeEventListener('scrollend', scrollEnded);
 };
-

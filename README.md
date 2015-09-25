@@ -33,6 +33,10 @@ In your view:
 In your controller (for example):
 
 ```javascript
+var validateSender = function(model) {
+    return model.get('emitter') == Alloy.User.get('objectId');
+}
+
 $.chat.on('newMessage', function (newMessageEvent) {
     var message = Alloy.createModel('Message', {
          content: newMessageEvent.message,
@@ -48,7 +52,8 @@ $.chat.on('moremessages', function () {
 });
 
 $.chat.init({
-    messages: Alloy.Collections.discussion
+    messages: Alloy.Collections.discussion,
+    validateSender: validateSender
 });
 ```
 
