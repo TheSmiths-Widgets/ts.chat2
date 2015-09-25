@@ -3,6 +3,10 @@
     width:           Ti.UI.FILL
 }
 
+"Label" : {
+    color: "#000"
+}
+
 // LISTVIEW = messages
 
 "#listView" : {
