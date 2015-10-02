@@ -2,7 +2,7 @@
 
 *Inspired from [ts.chat](https://github.com/TheSmiths-Widgets/ts.chat).*
 
-A small chat view (list of messages and text area to send new ones).
+A small chat view (list of messages and text area to send new ones). The widget is being given a collection. Its only job is to display the collection. The collection order is preserved so you have to sort it manually, on your side, if you intend so. When the user writes and sends a message from the text field, an event is fired ('*newmessage*'). Another kind of event is fired when the user scrolls to the top ('*moremessages*').
 
 ![Demo](https://raw.githubusercontent.com/rpellerin/ts.chat2/develop/demo.gif)
 
@@ -15,6 +15,25 @@ Clone this repo into your ```app/widget``` folder.
 None :)
 
 ## How to use it
+
+It uses Alloy models and collections ([http://docs.appcelerator.com/titanium/3.0/#!/guide/Alloy_Collection_and_Model_Objects](http://docs.appcelerator.com/titanium/3.0/#!/guide/Alloy_Collection_and_Model_Objects)) which are based on [Backbone.js collections](http://backbonejs.org/).
+
+The model must have, at least, those 3 properties:
+
+- **content**: the actual message
+- **emitter**: either a string or an object, it's the sender
+- **created_at**: the date of the message
+
+Example:
+
+```javascript
+var msg = Alloy.createModel('Message', {
+    content: "Hello world",
+    emitter: Alloy.User.objectId, // Alloy.User is an object we created in alloy.js, for example
+    created_at: new Date(2015, 12, 31, 0, 0, 0)
+});
+```
+## Real world example
 
 In your view:
 
@@ -30,9 +49,32 @@ In your view:
 </Alloy>
 ```
 
-In your controller:
+In your controller (for example):
 
 ```javascript
+var validateSender = function(model) {
+    return model.get('emitter') == Alloy.User.get('objectId');
+}
+
+$.chat.on('newMessage', function (newMessageEvent) {
+    var message = Alloy.createModel('Message', {
+         content: newMessageEvent.message,
+         emitter: Alloy.User.get('objectId'),
+         created_at: newMessageEvent.created_at
+     });
+    Alloy.Collections.discussion.add(message);
+    newMessageEvent.success(); // Mandatory, to acknowledge sending the message successfully
+});
+
+$.chat.on('moremessages', function (event) {
+    // Fetch a remote server and add data into Alloy.Collections.discussion
+    setTimeout(function(){
+        event.hide();
+    }, 1000);
+
+    // See https://github.com/FokkeZB/nl.fokkezb.pullToRefresh for more options of Pull to Refres
+});
+
 // Customize your chat before initialize it
 $.chat.customize({
     sendBtn : {
@@ -44,11 +86,10 @@ $.chat.customize({
     }
 });
 
-// Initialize your chat
 $.chat.init({
     messages: Alloy.Collections.discussion,
     validateSender: validateSender
-})
+});
 ```
 
 Bonus, in your tss file:
@@ -67,17 +108,16 @@ Bonus, in your tss file:
 
 ## TODO (from the most important to the least)
 
-- Test on iOS
-- Add more functions from [ts.chat](https://github.com/TheSmiths-Widgets/ts.chat) (widget.js)
 - Add some customization
     - Allow to add more buttons at the bottom (like in the Hangout app from Google)
         - Each button would raise its own event when pressed
     - Allow to change the send button (image or text)
     - Enable i18n
 - Generate the documentation into ```gh-pages```
-- Create a sample app into ```sample```
+
 
 ### Changelog
+- `0.3.0` : Add [Pull to Refresh Widget](https://github.com/FokkeZB/nl.fokkezb.pullToRefresh).
 - `0.2.0` : Add [FontAwesome](http://fontawesome.io/) and customization to `sendBtn`.
 
 
