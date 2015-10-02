@@ -1,7 +1,7 @@
 <Alloy>
     <Collection id="messages" src="message" instance="true"/>
     <View id="container">
-        <ListView id="listView" onSingletap="_snatchFocus" >
+        <ListView id="listView">
 
             <Templates>
 
@@ -36,11 +36,10 @@
 
         </ListView>
         <View id="chatTextFieldContainer">
-            <Label id="separator" />
-            <View id="subSeparator">
-                <TextArea id="typingArea" onChange="_resizeTypingArea" />
-                <View id="btnWrapper">
-                    <Button id="sendBtn" title=">" onClick="_send" />
+            <TextArea id="typingArea" onChange="_resizeTypingArea" />
+            <View id="btnWrapper">
+                <View id="sendBtn" onTouchstart="_fadeInSend" onTouchend="_send" onTouchcancel="_fadeOutSend">
+                    <Label id="faSendBtn"/>
                 </View>
             </View>
         </View>

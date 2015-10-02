@@ -33,7 +33,22 @@ In your view:
 In your controller:
 
 ```javascript
-// TODO
+// Customize your chat before initialize it
+$.chat.customize({
+    sendBtn : {
+        icon : 'fa-chrome', // FontAwesome Icon
+        iconColor: 'green', // FontAwesome Color
+        iconSize: 30, // FontAwesome Icon Size
+        color: 'red', // BackgroundColor
+        fadeIn: 'black' // BackgroundColor when touched
+    }
+});
+
+// Initialize your chat
+$.chat.init({
+    messages: Alloy.Collections.discussion,
+    validateSender: validateSender
+})
 ```
 
 Bonus, in your tss file:
@@ -61,5 +76,9 @@ Bonus, in your tss file:
     - Enable i18n
 - Generate the documentation into ```gh-pages```
 - Create a sample app into ```sample```
+
+### Changelog
+- `0.2.0` : Add [FontAwesome](www.fontawesome.io) and customization to `sendBtn`.
+
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)

@@ -3,6 +3,10 @@
     width:           Ti.UI.FILL
 }
 
+"Label" : {
+    color: "#000"
+}
+
 // LISTVIEW = messages
 
 "#listView" : {
@@ -10,6 +14,11 @@
     height:          Ti.UI.FILL,
     top:             0,
     separatorColor:  "transparent"
+}
+
+"ListItem[platform=ios]" : {
+    height: Ti.UI.SIZE, // Best line of code of my life
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE // prevent weird feature on iOS (background strech)
 }
 
 ".listItem" : {
@@ -21,7 +30,7 @@
 ".message-row" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE
-} 
+}
 
 ".message-box" : {
     width: "70%",
@@ -66,14 +75,7 @@
     width:           Ti.UI.FILL,
     height:          Ti.UI.SIZE,
     bottom:          0,
-    backgroundColor: "#eee",
-    layout:          "vertical"
-}
-
-"#separator": {
-    backgroundColor:  "#ccc",
-    height:           "2dp",
-    width:            Ti.UI.FILL
+    backgroundColor: "#eee"
 }
 
 "#subSeparator" : {
@@ -86,6 +88,7 @@
     height: Ti.UI.SIZE,
 
     color: "#222",
+    backgroundColor: "white",
 
     textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
     focused:   "false",
@@ -103,19 +106,13 @@
     height: 58
 }
 
-"Button" : {
-    bottom: 4,
-    right:  4,
-    width:  50,
-    height: 50,
+"#sendBtn":{
+    width: 50
+  , height: 50
+  , borderRadius: 25
+  , backgroundColor: "#00AA00"
+}
 
-    font: {
-        fontSize: "16dp"
-    },
-
-    borderRadius: 25,
-
-    backgroundColor:         "#00AA00",
-    backgroundFocusedColor:  "#33CC33",
-    backgroundSelectedColor: "#33CC33"
+"#faSendBtn":{
+    color: '#fff'
 }
