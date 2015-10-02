@@ -1,40 +1,42 @@
 <Alloy>
     <Collection id="messages" src="message" instance="true"/>
     <View id="container">
-        <ListView id="listView">
+        <Widget id="ptr" src="nl.fokkezb.pullToRefresh" onRelease="_moremessages">
+            <ListView id="listView">
 
-            <Templates>
+                <Templates>
 
-                <ItemTemplate name="messageOnTheLeft">
-                    <View class="listItem">
-                        <View class="message-row">
-                            <View class="message-box left">
-                                <Label class="message" bindId="message" />
+                    <ItemTemplate name="messageOnTheLeft">
+                        <View class="listItem">
+                            <View class="message-row">
+                                <View class="message-box left">
+                                    <Label class="message" bindId="message" />
+                                </View>
                             </View>
+                            <Label class="date" bindId="messageDate" />
                         </View>
-                        <Label class="date" bindId="messageDate" />
-                    </View>
-                </ItemTemplate>
+                    </ItemTemplate>
 
-                <ItemTemplate name="messageOnTheRight">
-                    <View class="listItem">
-                        <View class="message-row">
-                            <View class="message-box right">
-                                <Label class="message" bindId="message" />
+                    <ItemTemplate name="messageOnTheRight">
+                        <View class="listItem">
+                            <View class="message-row">
+                                <View class="message-box right">
+                                    <Label class="message" bindId="message" />
+                                </View>
                             </View>
+                            <Label class="date" bindId="messageDate" />
                         </View>
-                        <Label class="date" bindId="messageDate" />
-                    </View>
-                </ItemTemplate>
+                    </ItemTemplate>
 
-            </Templates>
+                </Templates>
 
 
-            <ListSection dataCollection="$.messages" dataFunction="renderMessages" dataTransform="setTemplate">
-                <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" />
-            </ListSection>
+                <ListSection dataCollection="$.messages" dataFunction="renderMessages" dataTransform="setTemplate">
+                    <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" />
+                </ListSection>
 
-        </ListView>
+            </ListView>
+        </Widget>
         <View id="chatTextFieldContainer">
             <TextArea id="typingArea" onChange="_resizeTypingArea" />
             <View id="btnWrapper">

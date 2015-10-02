@@ -116,33 +116,33 @@ function _fadeOutSend(event){
 * @fires newmessage
 */
 function _send(event) {
-  this.backgroundColor = _fadeOutColor;
+    this.backgroundColor = _fadeOutColor;
 
-  if (0 === $.typingArea.value.length) return;
-  $.sendBtn.touchEnabled = false;
+    if (0 === $.typingArea.value.length) return;
+    $.sendBtn.touchEnabled = false;
 
-  /*
-   * Triggered when the user send a message
-   * @event newMessage
-   * @param {Object} message The message entered
-   * @param {Date} date The date at which it has been send
-   * @param {Function} success Callback to call once the message has been successfully handled
-   * @param {Function} error Callback to call if an error occured
-   */
-  var newmessageEvent = {
-      message: $.typingArea.value,
-      created_at: new Date(),
-      success: function () {
-          $.typingArea.value = "";
-          _resizeTypingArea();
-          $.sendBtn.touchEnabled = true;
-          scrollToBottom();
-      },
-      error: function () {
-          $.sendBtn.touchEnabled = true;
-      }
-  };
-  $.trigger('newmessage', newmessageEvent);
+    /*
+    * Triggered when the user send a message
+    * @event newMessage
+    * @param {Object} message The message entered
+    * @param {Date} date The date at which it has been send
+    * @param {Function} success Callback to call once the message has been successfully handled
+    * @param {Function} error Callback to call if an error occured
+    */
+    var newmessageEvent = {
+        message: $.typingArea.value,
+        created_at: new Date(),
+        success: function () {
+            $.typingArea.value = "";
+            _resizeTypingArea();
+            $.sendBtn.touchEnabled = true;
+            scrollToBottom();
+        },
+        error: function () {
+            $.sendBtn.touchEnabled = true;
+        }
+    };
+    $.trigger('newmessage', newmessageEvent);
 }
 
 /**
@@ -215,14 +215,21 @@ function listViewSetBottom() {
 * @fires moremessages
 */
 function scrollEnded(scrollEvent) {
-  if (scrollEvent.firstVisibleItemIndex !== $._oldFirstVisibleItemIndex && scrollEvent.firstVisibleItemIndex === 0)
-      $.trigger('moremessages');
+  // if (scrollEvent.firstVisibleItemIndex !== $._oldFirstVisibleItemIndex && scrollEvent.firstVisibleItemIndex === 0)
+  //     $.trigger('moremessages');
   $._oldFirstVisibleItemIndex = scrollEvent.firstVisibleItemIndex;
 }
 
 $.listView.addEventListener('itemclick', _snatchFocus);
 $.chatTextFieldContainer.addEventListener('postlayout', listViewSetBottom);
 $.listView.addEventListener('scrollend', scrollEnded);
+
+/*
+@ _moremessages
+*/
+function _moremessages(event){
+    $.trigger('moremessages', event);
+};
 
 // Set FontAwesome and Stuffs
 (function(){

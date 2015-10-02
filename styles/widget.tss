@@ -13,18 +13,21 @@
     width:           Ti.UI.FILL,
     height:          Ti.UI.FILL,
     top:             0,
-    separatorColor:  "transparent"
+    separatorColor:  "transparent",
+    backgroundColor: 'transparent'
 }
 
 "ListItem[platform=ios]" : {
     height: Ti.UI.SIZE, // Best line of code of my life
-    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE // prevent weird feature on iOS (background strech)
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE, // prevent weird feature on iOS (background strech)
+    backgroundColor: "transparent"
 }
 
 ".listItem" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
-    layout: "vertical"
+    layout: "vertical",
+    backgroundColor: 'transparent'
 }
 
 ".message-row" : {
@@ -96,7 +99,9 @@
     left:  4,
     right: 58, // Since the 'send' button is 50 width, + margin 4, that's 58
 
-    focused: "false"
+    focused: "false",
+
+    borderRadius: 5
 }
 
 "#btnWrapper" : {

@@ -3,7 +3,7 @@
 	"name": "ts.chat2",
 	"description" : "Fully-customizable chat window, for iOS and Android",
 	"author": "Romain Pellerin",
-	"version": "0.2.0",
+	"version": "0.1.0",
 	"copyright":"Copyright (c) 2015",
 	"license":"Public Domain",
 	"min-alloy-version": "1.0",
