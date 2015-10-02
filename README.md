@@ -78,7 +78,7 @@ Bonus, in your tss file:
 - Create a sample app into ```sample```
 
 ### Changelog
-- `0.2.0` : Add [FontAwesome](www.fontawesome.io) and customization to `sendBtn`.
+- `0.2.0` : Add [FontAwesome](http://fontawesome.io/) and customization to `sendBtn`.
 
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)
