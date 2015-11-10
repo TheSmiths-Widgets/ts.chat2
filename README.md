@@ -41,7 +41,7 @@ Example:
 ```javascript
 var msg = Alloy.createModel('Message', {
     content: "Hello world",
-    emitter: Alloy.User.objectId, // Alloy.User is an object we created in alloy.js, for example
+    emitter: Alloy.User.get('id'), // Alloy.User is an object we created in alloy.js, for example
     created_at: new Date(2015, 12, 31, 0, 0, 0)
 });
 ```
@@ -76,7 +76,7 @@ Anyway, once your Collection is ready, you must initialize the chat:
 
 ```javascript
 var validateSender = function(model) {
-    return model.get('emitter') == 'Current user ID';
+    return model.get('emitter').get('id') == '<Current user ID>';
 }
 
 $.chat.init({
@@ -96,7 +96,7 @@ As easy as:
 $.chat.on('newMessage', function (newMessageEvent) {
     var message = Alloy.createModel('Message', {
          content: newMessageEvent.message,
-         emitter: 'Current user ID',
+         emitter: '<Current user ID>',
          created_at: newMessageEvent.created_at
      });
     Alloy.Collections.discussion.add(message);
