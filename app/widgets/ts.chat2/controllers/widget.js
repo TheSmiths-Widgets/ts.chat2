@@ -125,6 +125,9 @@ function _send(clickEvent) {
  */
 function getDisplayableDate(date) {
     var today = new Date();
+    if (typeof date === 'string') {
+        date = new Date(date);
+    }
     if (today.getYear() == date.getYear() && today.getMonth() == date.getMonth() && today.getDate() == date.getDate()) {
         return date.getHours() + ':' + date.getMinutes();
     } else
