@@ -1,0 +1,125 @@
+"#container" : {
+    height:          Ti.UI.FILL,
+    width:           Ti.UI.FILL
+}
+
+"Label" : {
+    color: "#000"
+}
+
+// LISTVIEW = messages
+
+"#listView" : {
+    width:           Ti.UI.FILL,
+    height:          Ti.UI.FILL,
+    top:             0,
+    separatorColor:  "transparent"
+}
+
+"ListItem[platform=ios]" : {
+    height: Ti.UI.SIZE, // Best line of code of my life
+    selectionStyle: Ti.UI.iPhone.ListViewCellSelectionStyle.NONE // prevent weird feature on iOS (background strech)
+}
+
+".listItem" : {
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+    layout: "vertical"
+}
+
+".message-row" : {
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE
+} 
+
+".message-box" : {
+    width: "70%",
+    height: Ti.UI.SIZE,
+    borderRadius: 10,
+    top: 3,
+    bottom: 3
+}
+
+".left" : {
+    left: 3,
+    backgroundColor: "#ddd"
+}
+
+".right" : {
+    right: 3,
+    backgroundColor: "#bbb"
+}
+
+".message" : {
+    top: 7,
+    right: 7,
+    bottom: 7,
+    left: 7,
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE
+}
+
+".date" : {
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+    textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
+    color: "#444",
+    font: {
+        fontSize: "10dp"
+    }
+}
+
+// NEW MESSAGE TEXT FIELD
+
+"#chatTextFieldContainer": {
+    width:           Ti.UI.FILL,
+    height:          Ti.UI.SIZE,
+    bottom:          0,
+    backgroundColor: "#eee"
+}
+
+"#subSeparator" : {
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+}
+
+"TextArea" : {
+    width:  Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+
+    color: "#222",
+    backgroundColor: "white",
+
+    textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
+    focused:   "false",
+
+    left:  4,
+    right: 58, // Since the 'send' button is 50 width, + margin 4, that's 58
+
+    focused: "false"
+}
+
+"#btnWrapper" : {
+    bottom: 0,
+    right:  0,
+    width:  58,
+    height: 58
+}
+
+"Button" : {
+    bottom: 4,
+    right:  4,
+    width:  50,
+    height: 50,
+
+    font: {
+        fontSize: "16dp"
+    },
+    color: "white",
+
+    borderRadius: 25,
+
+    backgroundColor:         "#00AA00",
+    backgroundFocusedColor:  "#33CC33",
+    backgroundSelectedColor: "#33CC33"
+}

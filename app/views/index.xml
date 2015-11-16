@@ -1,0 +1,5 @@
+<Alloy>
+	<Window class="container">
+        <Widget id="chat" src="ts.chat2"></Widget>
+	</Window>
+</Alloy>
