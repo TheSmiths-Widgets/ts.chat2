@@ -197,6 +197,11 @@ $.listView.addEventListener('itemclick', _snatchFocus);
 $.chatTextFieldContainer.addEventListener('postlayout', listViewSetBottom);
 $.listView.addEventListener('scrollend', scrollEnded);
 
+function toggleInputEnabled(bool) {
+    $.typingArea.setEditable(bool);
+    $.sendBtn.setEnabled(bool);
+}
+
 /* Exports the API */
 exports.init = init;
 exports.destroy = function() {
@@ -207,4 +212,10 @@ exports.destroy = function() {
     // Listeners on views
     $.listView.removeEventListener('itemclick', _snatchFocus);
     $.listView.removeEventListener('scrollend', scrollEnded);
+};
+exports.disable = function() {
+    toggleInputEnabled(false);
+};
+exports.enable = function() {
+    toggleInputEnabled(true);
 };
