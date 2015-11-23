@@ -219,3 +219,9 @@ exports.disable = function() {
 exports.enable = function() {
     toggleInputEnabled(true);
 };
+exports.hideInput = function() {
+    $.container.remove($.chatTextFieldContainer);
+};
+exports.showInput = function() {
+    $.container.add($.chatTextFieldContainer);
+};
