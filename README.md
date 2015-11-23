@@ -117,8 +117,8 @@ If you will reuse the Collection for other chats, remember to reset it when clos
 ```javascript
 function close() {
 	Alloy.Collections.discussion.reset();
-	$.destroy();
-    $.chatWin.close();
+	$.chatWin.destroy();
+    $.destroy();
 }
 ```
 
@@ -158,7 +158,16 @@ Feel free to enclose the chat in a view and style it a little bit in your tss fi
 | batchSize (optional) | *Number* | How many message should be ask for each load (default 10). |
 
 ## Accessible Methods
-All internal methods are private, but you can listen to two triggers to do some actions
+| Name | Parameters | Description | Example |
+| ---- | ---------- | ----------- | ------- |
+| init | Object (see the sources) | Initialize the widget | `$.chat.init(obj)` |
+| destroy | - | Remove all internal listeners. Free the resources. | `$.chat.destroy()` |
+| disable | - | Disable the inputs (text field and button) | `$.chat.disable()` |
+| enable | - | Enable the inputs (text field and button) | `$.chat.enable()` |
+| hideInput | - | Hide the bottom bar (text field and button) | `$.chat.hideInput()` |
+| showInput | - | Show the bottom bar (text field and button) | `$.chat.showInput()` |
+
+In addition, you can listen to two triggers to do some actions.
 
 | Trigger | Description | Example |
 | ------- | ----------- | ------- |
