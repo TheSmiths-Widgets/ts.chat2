@@ -14,15 +14,8 @@ This is a small chat view (list of messages and text area to send new ones). The
 * Supported Platforms: Android, iOS
 
 ## Adding to Your Alloy Project
-* In your application's config.json file you need to include the following line in your dependencies:
 
-```
-"dependencies": {
-    "ts.chat2": "*"
-}
-```
-
-*  Create the `widgets` directory in your app directory if it doesn't already exist.
+*  Create the `widgets` directory in your `app` directory if it doesn't already exist.
 *  Copy the ts.chat2 folder into your `app/widgets` directory.
 * Add it to your `app/config.json`
 ```json
