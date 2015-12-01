@@ -8,8 +8,8 @@ This is a small chat view (list of messages and text area to send new ones). The
 *You have a full demo example project in the sample branch*
 
 ##Manifest
-* Version: 1.0
-* License: not specified yet
+* Version: 0.2.0
+* License: Beerware
 * Author: rpellerin
 * Supported Platforms: Android, iOS
 
@@ -22,10 +22,16 @@ This is a small chat view (list of messages and text area to send new ones). The
 }
 ```
 
-*  Create a widgets directory in your app directory if it doesn't already exist.
-*  Copy the ts.chat2 folder into your app/widgets directory.
+*  Create the `widgets` directory in your app directory if it doesn't already exist.
+*  Copy the ts.chat2 folder into your `app/widgets` directory.
+* Add it to your `app/config.json`
+```json
+"dependencies": {
+    "ts.chat2": "0.2.0"
+}
+```
 
-Opposed to version one of ts.chat, we need no more dependencies :)
+Opposed to version 1 of ts.chat, we need no more dependencies :)
 
 ## Basic model info
 It uses Alloy models and collections ([http://docs.appcelerator.com/titanium/3.0/#!/guide/Alloy_Collection_and_Model_Objects](http://docs.appcelerator.com/titanium/3.0/#!/guide/Alloy_Collection_and_Model_Objects)) which are based on [Backbone.js collections](http://backbonejs.org/).
@@ -85,9 +91,41 @@ $.chat.init({
 });
 ```
 
-This will show all your messages and the chat is ready for interaction.
-**validateSender** is a function in where you say to the chat who is the user that "emits" the messages (the other will be the receiver).
-You will assign here the user "identifier" to be on the right side of the conversation.
+This will show all your messages and the chat is ready for interaction. The two properties are required (`messages` and `validateSender`).
+
+**validateSender** is a function in where you say to the chat who is the user that "emits" the messages (the other will be the receiver). Basically, return `true` if `model` is the emitter, otherwise `false`.
+
+### Other options
+
+You can customize the widget a lot more:
+
+```javascript
+$.chat.init({
+    messages: Alloy.Collections.messages, // required
+    validateSender: validateSender, // required
+    delay: 700,
+    backgroundColor: Alloy.CFG.COLORS.WHITE_DARK,
+    backgroundColorLeft: Alloy.CFG.COLORS.WHITE,
+    backgroundColorRight: Alloy.CFG.COLORS.BLUE,
+    colorLeft: Alloy.CFG.COLORS.BLUE,
+    colorRight: Alloy.CFG.COLORS.WHITE,
+    backgroundColorBottomBar: Alloy.CFG.COLORS.BLUE,
+    sendButton: {
+        title: 'Send',
+        color: "white",
+        borderRadius: 5,
+        backgroundColor:         Alloy.CFG.COLORS.BLUE,
+        backgroundFocusedColor:  Alloy.CFG.COLORS.BLUE_DARK,
+        backgroundSelectedColor: Alloy.CFG.COLORS.BLUE_DARK
+    },
+    typingArea: {
+        color: Alloy.CFG.COLORS.BLUE,
+        backgroundColor: Alloy.CFG.COLORS.WHITE
+    }
+});
+```
+
+Here, the given values are just examples. Please check out the sources for more information about each property.
 
 ## Send a new message
 As easy as:
@@ -122,7 +160,7 @@ function close() {
 }
 ```
 
-## Styling a bit:
+## How to include in your XML:
 
 Feel free to enclose the chat in a view and style it a little bit in your tss file:
 
@@ -154,8 +192,8 @@ Feel free to enclose the chat in a view and style it a little bit in your tss fi
 | --------- | ---- | ----------- |
 | messages | *Collection* | Initial set of messages. |
 | validateSender | *function* | Function that takes one argument, a model. Must returns TRUE if the message is from you and then has to be displayed on the right side, otherwise it returns FALSE. |
-| maxTypingHeight (optional) | *Number or decimal* | The max size of the typing area (it can grow automatically). If decimal less than 1, a corresponding percentage of the screen size will be used (default 0.25). |
-| batchSize (optional) | *Number* | How many message should be ask for each load (default 10). |
+
+For the other available parameters, see above or directly the sources.
 
 ## Accessible Methods
 | Name | Parameters | Description | Example |
@@ -174,13 +212,8 @@ In addition, you can listen to two triggers to do some actions.
 | newMessage | Allows you to send a new message. Triggered when user press "send" button. | `$.chat.on("newMessage", function (newMessageEvent) {...});` |
 | moremessages | Allows you to add a bunch of messages to the Collection. Triggered when user scrolls to top of the calendar | `$.chat.on("moremessages", function () {...});` |
 
-## TODO (from the most important to the least)
+## TODO
 
-- Add some customization
-    - Allow to add more buttons at the bottom (like in the Hangout app from Google)
-        - Each button would raise its own event when pressed
-    - Allow to change the send button (image or text)
-    - Enable i18n
 - Generate the documentation into ```gh-pages```
 
 [![wearesmiths](http://wearesmiths.com/media/logoGitHub.png)](http://wearesmiths.com)
