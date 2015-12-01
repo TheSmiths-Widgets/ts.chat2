@@ -8,7 +8,7 @@
                 <ItemTemplate name="messageOnTheLeft">
                     <View class="listItem">
                         <View class="message-row">
-                            <View class="message-box left">
+                            <View class="message-box left" bindId="messageBox">
                                 <Label class="message" bindId="message" />
                             </View>
                         </View>
@@ -19,7 +19,7 @@
                 <ItemTemplate name="messageOnTheRight">
                     <View class="listItem">
                         <View class="message-row">
-                            <View class="message-box right">
+                            <View class="message-box right" bindId="messageBox">
                                 <Label class="message" bindId="message" />
                             </View>
                         </View>
@@ -31,7 +31,7 @@
 
 
             <ListSection dataCollection="$.messages" dataFunction="renderMessages" dataTransform="setTemplate">
-                <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" />
+                <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" messageBox:backgroundColor="{bg}" />
             </ListSection>
 
         </ListView>

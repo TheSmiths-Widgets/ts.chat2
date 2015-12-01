@@ -41,13 +41,11 @@
 }
 
 ".left" : {
-    left: 3,
-    backgroundColor: "#ddd"
+    left: 3
 }
 
 ".right" : {
-    right: 3,
-    backgroundColor: "#bbb"
+    right: 3
 }
 
 ".message" : {

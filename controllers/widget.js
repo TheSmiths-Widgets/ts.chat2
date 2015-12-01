@@ -1,31 +1,34 @@
 $._resizeThreshold = 0;
 $._oldFirstVisibleItemIndex = -1;
 
+var _TAG = "ts.chat2",
+    _ERRORS = {
+        MISSING_FUNCTION_VALIDATE: "A function to determine the sender of messages is required"
+    },
+    _CONFIG = {
+        /* Customisable */
+        backgroundColor: "#fff",
+        backgroundColorLeft: '#ddd',
+        backgroundColorRight: '#bbb',
+
+        /* Fixed */
+        maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25, // Not more that 25% of the screen height
+        batchSize: 10, // Default number of messages to display
+        delay: 500 // Before scrolling to the bottom
+};
+
 /**
  * @method init
  * Initialize the widget. MUST be called before any further action.
  * @param {Object} config The configuration of the module
- * @param {Number} config.batchSize How many message should be ask for each load [OPTIONAL, default 10]
- * @param {Number} config.maxTypingHeight The max size of the typing area, if decimal less than 1, a
- *      corresponding percentage of the screen size will be used. [OPTIONAL, default 0.25]
  * @param {Object[]} config.messages Initial set of messages [REQUIRED]
  * @param {Function} config.validateSender Function that takes one argument, a model. Must returns TRUE if the message is from you and then has to be displayed on the right side, otherwise it returns FALSE [REQUIRED]
  */
 function init(config) {
-    /* Retrieve the configuration */
-    if (config.maxTypingHeight && Math.abs(+config.maxTypingHeight) < 1) {
-        config.maxTypingHeight = Ti.Platform.displayCaps.platformHeight * +config.maxTypingHeight;
-    }
+    /* First of all, ensure that necessary options have been supplied */
+    if (config.validateSender === undefined) { throw(_TAG + " " + _ERRORS.MISSING_FUNCTION_VALIDATE); }
 
-    $._config = _.extend({
-        batchSize: 10, // Default number of messages to display
-        maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25, // Not more that 25% of the screen height,
-        validateSender: function(ignore) { return true; }
-    }, config);
-
-    if ($._config.validateSender === undefined) {
-        throw("No function provided to determine to which side should go each message.");
-    }
+    _.extend(_CONFIG, config);
 
     /* Syncrhonize external collection with the one in the widget */
     $.messages.reset();
@@ -33,17 +36,18 @@ function init(config) {
 
     // When the outter collection is updated...
     config.messages.on('fetch destroy change add remove reset', function (e) {
-        $.messages.models = $._config.messages.models;
+        $.messages.models = _CONFIG.messages.models;
         renderMessages(e); // Force UI update
     });
 
     if (OS_ANDROID) {
         /* On android, the stored size isn't the good one. Need to be weighted with the density */
-        $._config.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
+        _CONFIG.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
 
+    $.container.setBackgroundColor(_CONFIG.backgroundColor)
 
-    setTimeout(scrollToBottom, 500); // TODO something more beautiful, elegant, clean...
+    setTimeout(scrollToBottom, _CONFIG.delay); // TODO something more beautiful, elegant, clean...
 }
 
 /**
@@ -56,9 +60,9 @@ function _resizeTypingArea (changeEvent) {
     var typingAreaHeight = $.typingArea.rect.height,
         length           = $.typingArea.value.length;
 
-    if (typingAreaHeight > $._config.maxTypingHeight) {
+    if (typingAreaHeight > _CONFIG.maxTypingHeight) {
         /* The area is bigger than the limit, let's resize */
-        $.typingArea.height = $._config.maxTypingHeight;
+        $.typingArea.height = _CONFIG.maxTypingHeight;
          //Keep an eye on the length that trigger this change
         $._resizeThreshold = $._resizeThreshold || length;
     } else if (length < $._resizeThreshold) {
@@ -144,8 +148,10 @@ function getDisplayableDate(date) {
  */
 function setTemplate(model) {
     var transform = model.toJSON() ; // collection of messages
-    transform.template = $._config.validateSender(model) ? "messageOnTheRight" : "messageOnTheLeft";
+    transform.template = _CONFIG.validateSender(model) ? "messageOnTheRight" : "messageOnTheLeft";
     transform.created_at = getDisplayableDate(model.get('created_at'));
+    transform.bg = transform.template === 'messageOnTheLeft' ? _CONFIG.backgroundColorLeft : _CONFIG.backgroundColorRight;
+    
     return transform;
 }
 
@@ -207,7 +213,7 @@ exports.init = init;
 exports.destroy = function() {
     // Listeners on data
     $.messages.off('fetch destroy change add remove reset', renderMessages);
-    $._config.messages.off('fetch destroy change add remove reset', renderMessages);
+    _CONFIG.messages.off('fetch destroy change add remove reset', renderMessages);
 
     // Listeners on views
     $.listView.removeEventListener('itemclick', _snatchFocus);
