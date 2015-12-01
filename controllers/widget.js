@@ -6,6 +6,8 @@ var _TAG = "ts.chat2",
         MISSING_FUNCTION_VALIDATE: "A function to determine the sender of messages is required"
     },
     _CONFIG = {
+        validateSender: undefined, // Required by users
+
         /* Customisable */
         backgroundColor: "#fff",
         backgroundColorLeft: '#ddd',
@@ -14,14 +16,17 @@ var _TAG = "ts.chat2",
         colorRight: 'black',
         backgroundColorBottomBar: '#eee',
         sendButton: {
-            text: '>',
+            title: '>',
             color: "white",
             borderRadius: 25,
             backgroundColor:         "#00AA00",
             backgroundFocusedColor:  "#33CC33",
             backgroundSelectedColor: "#33CC33"
         },
-
+        typingArea: {
+            color: "#222",
+            backgroundColor: "white"
+        },
 
         /* Fixed */
         maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25, // Not more that 25% of the screen height
@@ -40,11 +45,7 @@ function init(config) {
     /* First of all, ensure that necessary options have been supplied */
     if (config.validateSender === undefined) { throw(_TAG + " " + _ERRORS.MISSING_FUNCTION_VALIDATE); }
 
-    if (config.sendButton) {
-        var sendButton = _.extend(_CONFIG.sendButton, config.sendButton);
-    }
     _.extend(_CONFIG, config);
-    _CONFIG.sendButton = sendButton;
 
     /* Syncrhonize external collection with the one in the widget */
     $.messages.reset();
@@ -64,6 +65,7 @@ function init(config) {
     $.container.setBackgroundColor(_CONFIG.backgroundColor);
     $.chatTextFieldContainer.setBackgroundColor(_CONFIG.backgroundColorBottomBar);
     $.sendBtn.applyProperties(_CONFIG.sendButton);
+    $.typingArea.applyProperties(_CONFIG.typingArea);
 
     setTimeout(scrollToBottom, _CONFIG.delay); // TODO something more beautiful, elegant, clean...
 }

@@ -80,13 +80,10 @@
     height: Ti.UI.SIZE,
 }
 
-"TextArea" : {
+"#typingArea" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
-    borderRadius: "5dp",
-
-    color: "#222",
-    backgroundColor: "white",
+    borderRadius: 5,
 
     textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
     focused:   "false",
