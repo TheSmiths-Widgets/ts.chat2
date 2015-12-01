@@ -31,14 +31,14 @@
 
 
             <ListSection dataCollection="$.messages" dataFunction="renderMessages" dataTransform="setTemplate">
-                <ListItem template="{template}" message:text="{content}" messageDate:text="{created_at}" messageBox:backgroundColor="{bg}" />
+                <ListItem template="{template}" message:text="{content}" message:color="{color}" messageDate:text="{created_at}" messageBox:backgroundColor="{bg}" />
             </ListSection>
 
         </ListView>
         <View id="chatTextFieldContainer">
             <TextArea id="typingArea" onChange="_resizeTypingArea" />
             <View id="btnWrapper">
-                <Button id="sendBtn" title=">" onClick="_send" />
+                <Button id="sendBtn" onClick="_send" />
             </View>
         </View>
     </View>

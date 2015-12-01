@@ -10,6 +10,18 @@ var _TAG = "ts.chat2",
         backgroundColor: "#fff",
         backgroundColorLeft: '#ddd',
         backgroundColorRight: '#bbb',
+        colorLeft: 'black',
+        colorRight: 'black',
+        backgroundColorBottomBar: '#eee',
+        sendButton: {
+            text: '>',
+            color: "white",
+            borderRadius: 25,
+            backgroundColor:         "#00AA00",
+            backgroundFocusedColor:  "#33CC33",
+            backgroundSelectedColor: "#33CC33"
+        },
+
 
         /* Fixed */
         maxTypingHeight: Ti.Platform.displayCaps.platformHeight * 0.25, // Not more that 25% of the screen height
@@ -28,7 +40,11 @@ function init(config) {
     /* First of all, ensure that necessary options have been supplied */
     if (config.validateSender === undefined) { throw(_TAG + " " + _ERRORS.MISSING_FUNCTION_VALIDATE); }
 
+    if (config.sendButton) {
+        var sendButton = _.extend(_CONFIG.sendButton, config.sendButton);
+    }
     _.extend(_CONFIG, config);
+    _CONFIG.sendButton = sendButton;
 
     /* Syncrhonize external collection with the one in the widget */
     $.messages.reset();
@@ -45,7 +61,9 @@ function init(config) {
         _CONFIG.maxTypingHeight /= Ti.Platform.displayCaps.logicalDensityFactor;
     }
 
-    $.container.setBackgroundColor(_CONFIG.backgroundColor)
+    $.container.setBackgroundColor(_CONFIG.backgroundColor);
+    $.chatTextFieldContainer.setBackgroundColor(_CONFIG.backgroundColorBottomBar);
+    $.sendBtn.applyProperties(_CONFIG.sendButton);
 
     setTimeout(scrollToBottom, _CONFIG.delay); // TODO something more beautiful, elegant, clean...
 }
@@ -151,7 +169,7 @@ function setTemplate(model) {
     transform.template = _CONFIG.validateSender(model) ? "messageOnTheRight" : "messageOnTheLeft";
     transform.created_at = getDisplayableDate(model.get('created_at'));
     transform.bg = transform.template === 'messageOnTheLeft' ? _CONFIG.backgroundColorLeft : _CONFIG.backgroundColorRight;
-    
+    transform.color = transform.template === 'messageOnTheLeft' ? _CONFIG.colorLeft : _CONFIG.colorRight;
     return transform;
 }
 

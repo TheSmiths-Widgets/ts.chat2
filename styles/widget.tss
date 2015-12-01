@@ -61,7 +61,7 @@
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
     textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
-    color: "#444",
+    color: "#555",
     font: {
         fontSize: "10dp"
     }
@@ -72,8 +72,7 @@
 "#chatTextFieldContainer": {
     width:           Ti.UI.FILL,
     height:          Ti.UI.SIZE,
-    bottom:          0,
-    backgroundColor: "#eee"
+    bottom:          0
 }
 
 "#subSeparator" : {
@@ -84,6 +83,7 @@
 "TextArea" : {
     width:  Ti.UI.FILL,
     height: Ti.UI.SIZE,
+    borderRadius: "5dp",
 
     color: "#222",
     backgroundColor: "white",
@@ -104,7 +104,7 @@
     height: 58
 }
 
-"Button" : {
+"#sendBtn" : {
     bottom: 4,
     right:  4,
     width:  50,
@@ -112,12 +112,5 @@
 
     font: {
         fontSize: "16dp"
-    },
-    color: "white",
-
-    borderRadius: 25,
-
-    backgroundColor:         "#00AA00",
-    backgroundFocusedColor:  "#33CC33",
-    backgroundSelectedColor: "#33CC33"
+    }
 }
