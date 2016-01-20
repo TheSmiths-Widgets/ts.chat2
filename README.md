@@ -3,7 +3,7 @@
 
 This is a small chat view (list of messages and text area to send new ones). The widget is being given a collection. Its only job is to display the collection. The collection order is preserved so you have to sort it manually, on your side, if you intend so. When the user writes and sends a message from the text field, an event is fired ('*newmessage*'). Another kind of event is fired when the user scrolls to the top ('*moremessages*').
 
-![Demo](https://raw.githubusercontent.com/rpellerin/ts.chat2/develop/demo.gif)
+![Demo](https://raw.githubusercontent.com/TheSmiths-Widgets/ts.chat2/master/demo.gif)
 
 *You have a full demo example project in the sample branch*
 
